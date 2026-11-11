@@ -7,6 +7,9 @@ This program only copies those exact bytes to the output path, so every
 run writes identical output: no network, no randomness, no timestamps.
 
 Usage: python3 main.py [output-path]  (default: /output/entry.png)
+
+The picture satisfies the bounty gate by construction: a whole PNG,
+at most 1 MiB and 1024 by 1024 pixels (see README.md for the sizes).
 """
 import os
 import shutil
@@ -15,6 +18,8 @@ import sys
 SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cat.png")
 DST = sys.argv[1] if len(sys.argv) > 1 else "/output/entry.png"
 
+if not os.path.isfile(SRC):
+    raise SystemExit("missing %s" % SRC)
 os.makedirs(os.path.dirname(DST), exist_ok=True)
 shutil.copyfile(SRC, DST)
 print("wrote %s (%d bytes)" % (DST, os.path.getsize(DST)))
